@@ -1,0 +1,1 @@
+/usr/bin/cc -rdynamic CMakeFiles/parasail_stats.dir/apps/parasail_stats.c.o -o parasail_stats  -Wl,-rpath,/home/fekallen/parasail-2.6.2/build: libparasail.so -lz -lm 
