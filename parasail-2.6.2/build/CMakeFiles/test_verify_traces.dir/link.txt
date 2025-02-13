@@ -1,1 +1,0 @@
-/usr/bin/cc -rdynamic -fopenmp CMakeFiles/test_verify_traces.dir/tests/test_verify_traces.c.o -o test_verify_traces  -Wl,-rpath,/home/fekallen/parasail-2.6.2/build libparasail.so -lz -lm 
