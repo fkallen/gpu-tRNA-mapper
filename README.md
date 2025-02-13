@@ -71,6 +71,7 @@ Optional arguments:
     --resultListSize num : If a read can be mapped to multiple reference sequences with the same best score, output num alignments (default: 2147483647 (output all best mappings))
 ```
 
+Input files can be DNA or RNA. We support a four letter alphabet A, C, G, (T/U) , where T matches U and vice-versa.
 
 gpu_trna_mapper uses GPU 0. Use the CUDA environment variable `CUDA_VISIBLE_DEVICES` to select the GPU in multi-GPU systems
 
