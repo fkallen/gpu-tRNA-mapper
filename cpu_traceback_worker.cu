@@ -162,9 +162,7 @@ struct CpuTracebackAlignerWorker{
                     const int readEndPos = batchDataPtr->h_subjectEndPositions_inclusive[resultOffset + resultId] + 1;
 
                     auto NW_result = ParasailResult(
-                        //parasail_nw_trace_striped_avx2_256_16(
-                        // parasail_nw_trace_scan_avx2_256_16(
-                        parasail_nw_trace_diag_avx2_256_16(
+                        parasail_nw_trace_diag_32(
                             readSequence + readBeginPos, (readEndPos - readBeginPos),
                             referenceSequence + refBeginPos, (refEndPos - refBeginPos),
                             std::abs(options.scoring.gapopenscore), std::abs(options.scoring.gapextendscore),
@@ -305,14 +303,9 @@ struct CpuTracebackAlignerWorker{
                     if(batchDataPtr->h_queryStartPositions_inclusive[resultOffset + resultId] == -1 || batchDataPtr->h_subjectStartPositions_inclusive[resultOffset + resultId] == -1){
                         std::cerr << "error start pos -1\n";
                         std::exit(0);
-                        // resultptr = parasail_sg_qb_db_trace_diag_avx2_256_32(
-                        //     readSequence + readBeginPos, (readEndPos_excl - readBeginPos),
-                        //     referenceSequence + refBeginPos, (refEndPos_excl - refBeginPos),
-                        //     std::abs(options.scoring.gapopenscore), std::abs(options.scoring.gapextendscore),
-                        //     parasail_scoring_matrix
-                        // );
+
                     }else{
-                        resultptr = parasail_nw_trace_diag_avx2_256_32(
+                        resultptr = parasail_nw_trace_diag_32(
                             readSequence + readBeginPos, (readEndPos_excl - readBeginPos),
                             referenceSequence + refBeginPos, (refEndPos_excl - refBeginPos),
                             std::abs(options.scoring.gapopenscore), std::abs(options.scoring.gapextendscore),
@@ -320,19 +313,6 @@ struct CpuTracebackAlignerWorker{
                         );
                     }
                     auto SG_result = ParasailResult(resultptr, parasail_result_free);
-
-                    // auto SG_result = ParasailResult(
-                    //     //parasail_sg_qb_db_trace_striped_avx2_256_16(
-                    //     // parasail_sg_qb_db_trace_scan_avx2_256_16(
-                    //     parasail_sg_qb_db_trace_diag_avx2_256_32(
-                    //         readSequence + readBeginPos, (readEndPos_excl - readBeginPos),
-                    //         referenceSequence + refBeginPos, (refEndPos_excl - refBeginPos),
-                    //         std::abs(options.scoring.gapopenscore), std::abs(options.scoring.gapextendscore),
-                    //         parasail_scoring_matrix
-                    //     ),
-                    //     parasail_result_free
-                    // );
-
                                             
         
                     if(parasail_result_get_score(SG_result.get()) != score){
@@ -356,7 +336,7 @@ struct CpuTracebackAlignerWorker{
                         );
 
                         auto SG_result_full = ParasailResult(
-                            parasail_sg_trace_striped_avx2_256_16(
+                            parasail_sg_trace_striped_32(
                                 readSequence, readLength,
                                 referenceSequence, referenceLength,
                                 std::abs(options.scoring.gapopenscore), std::abs(options.scoring.gapextendscore),
@@ -393,26 +373,26 @@ struct CpuTracebackAlignerWorker{
                         std::cout << "\n";
 
                         int* fulltable = parasail_result_get_score_table(SG_full_table_result.get()); 
-                        std::cout << " parasail full score at endpos position " << fulltable[(readEndPos_excl-1) * referenceLength + (refEndPos_excl-1)] << "\n";
+                        // std::cout << " parasail full score at endpos position " << fulltable[(readEndPos_excl-1) * referenceLength + (refEndPos_excl-1)] << "\n";
 
-                        std::cout << "SG_full_table_result\n";
-                        for(int r = 0; r < readLength; r++){
-                            for(int c = 0; c < referenceLength; c++){
-                                std::cout << fulltable[r * referenceLength + c] << " ";
-                            }
-                            std::cout << "\n";
-                        }
-                        std::cout << "\n";
+                        // std::cout << "SG_full_table_result\n";
+                        // for(int r = 0; r < readLength; r++){
+                        //     for(int c = 0; c < referenceLength; c++){
+                        //         std::cout << fulltable[r * referenceLength + c] << " ";
+                        //     }
+                        //     std::cout << "\n";
+                        // }
+                        // std::cout << "\n";
 
-                        int* endpostable = parasail_result_get_score_table(SG_endpos_table_result.get()); 
-                        std::cout << "SG_endpos_table_result\n";
-                        for(int r = 0; r < readEndPos_excl; r++){
-                            for(int c = 0; c < refEndPos_excl; c++){
-                                std::cout << endpostable[r * refEndPos_excl + c] << " ";
-                            }
-                            std::cout << "\n";
-                        }
-                        std::cout << "\n";
+                        // int* endpostable = parasail_result_get_score_table(SG_endpos_table_result.get()); 
+                        // std::cout << "SG_endpos_table_result\n";
+                        // for(int r = 0; r < readEndPos_excl; r++){
+                        //     for(int c = 0; c < refEndPos_excl; c++){
+                        //         std::cout << endpostable[r * refEndPos_excl + c] << " ";
+                        //     }
+                        //     std::cout << "\n";
+                        // }
+                        // std::cout << "\n";
                         
                         std::exit(0);
                     }
