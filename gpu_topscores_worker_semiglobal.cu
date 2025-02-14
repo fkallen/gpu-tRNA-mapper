@@ -52,41 +52,24 @@ std::future<void> launchSemiglobalAlignmentGPUTopscoresWorker(
             
             try{
                 CUDACHECK(cudaSetDevice(deviceId));
-                if(options->use16x2){
-                    using GpuAlignerSwitch = GpuAlignerWithLengthSwitch<
-                        SemiglobalAlignment_16x2bit,
-                        alphabetSize,
-                        ScoreType16x2,
-                        penaltyType,
-                        ListOfConfigsShortQuery,
-                        ListOfConfigsLongQuery
-                    >;
-                    GpuTopScoresAlignerWorker<GpuAlignerSwitch> worker(
-                        options, 
-                        *substitutionMatrix2D,
-                        parasailScoringMatrix,
-                        inputQueue, 
-                        outputQueue
-                    );
-                    worker.run();
-                }else{
-                    using GpuAlignerSwitch = GpuAlignerWithLengthSwitch<
-                        SemiglobalAlignment_32bit,
-                        alphabetSize,
-                        ScoreType32,
-                        penaltyType,
-                        ListOfConfigsShortQuery,
-                        ListOfConfigsLongQuery
-                    >;
-                    GpuTopScoresAlignerWorker<GpuAlignerSwitch> worker(
-                        options, 
-                        *substitutionMatrix2D,
-                        parasailScoringMatrix,
-                        inputQueue, 
-                        outputQueue
-                    );
-                    worker.run();
-                }
+
+                using GpuAlignerSwitch = GpuAlignerWithLengthSwitch<
+                    SemiglobalAlignment_32bit,
+                    alphabetSize,
+                    ScoreType32,
+                    penaltyType,
+                    ListOfConfigsShortQuery,
+                    ListOfConfigsLongQuery
+                >;
+                GpuTopScoresAlignerWorker<GpuAlignerSwitch> worker(
+                    options, 
+                    *substitutionMatrix2D,
+                    parasailScoringMatrix,
+                    inputQueue, 
+                    outputQueue
+                );
+                worker.run();
+
 
             }catch (const rmm::bad_alloc& e){
                 std::cerr << e.what() << "\n";

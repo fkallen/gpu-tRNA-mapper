@@ -168,9 +168,9 @@ int main(int argc, char** argv){
             options.queue_depth = std::atoi(argv[x+1]);
             x++;
         }
-        if(argstring == "--use16x2"){
-            options.use16x2 = true;
-        }
+        // if(argstring == "--use16x2"){
+        //     options.use16x2 = true;
+        // }
         if(argstring == "--minAlignmentScore"){
             options.minAlignmentScore = std::atoi(argv[x+1]);
             x++;
@@ -229,7 +229,7 @@ int main(int argc, char** argv){
         std::cout << "gapopenscore="  << options.scoring.gapopenscore << "\n";
         std::cout << "gapextendscore="  << options.scoring.gapextendscore << "\n";
         std::cout << "verbose = " << options.verbose << "\n";
-        std::cout << "use16x2 = " << options.use16x2 << "\n";
+        // std::cout << "use16x2 = " << options.use16x2 << "\n";
         std::cout << "batchsize = " << options.batchsize << "\n";
         std::cout << "resultListSize = " << options.resultListSize << "\n";
         std::cout << "minAlignmentScore = " << options.minAlignmentScore << "\n";

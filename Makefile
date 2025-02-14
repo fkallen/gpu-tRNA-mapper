@@ -11,7 +11,15 @@ WARNINGS = -Xcompiler="-Wall -Wextra"
 DEFINES = -DLIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE -DNDEBUG
 INCLUDES = -I$(RMM_INCDIR) -I$(NVTX_INCDIR) -I$(PARASAIL_DIR) -I$(GPU_ALIGNMENT_API)
 LDFLAGS = -L$(PARASAIL_DIR)/build -lz -ldl -lparasail
-NVCC_FLAGS = -arch=native -lineinfo --extended-lambda -Xcompiler "-fopenmp" $(DEFINES) $(INCLUDES)
+
+# ARCH_SPECIFIER = \
+# 	-gencode=arch=compute_70,code=sm_70 \
+# 	-gencode=arch=compute_80,code=sm_80 \
+# 	-gencode=arch=compute_89,code=sm_89
+
+ARCH_SPECIFIER = -arch=native
+
+NVCC_FLAGS = $(ARCH_SPECIFIER) --threads 3 -lineinfo --extended-lambda -Xcompiler "-fopenmp" $(DEFINES) $(INCLUDES)
 
 COMPILE = nvcc $(NVCC_FLAGS) $(DIALECT) $(OPTIMIZATION) $(WARNINGS) -c $< -o $@
 

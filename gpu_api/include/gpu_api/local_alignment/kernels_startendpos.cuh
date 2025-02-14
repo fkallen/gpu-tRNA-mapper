@@ -5,7 +5,6 @@
 #include <cooperative_groups.h>
 
 #include "tile_processing.cuh"
-#include "state_linear.cuh"
 #include "state_affine.cuh"
 #include "../substitution_score_provider.cuh"
 #include "../util.cuh"
