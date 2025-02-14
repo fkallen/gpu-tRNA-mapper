@@ -1,10 +1,10 @@
-# gpuTrnaMapper
-gpuTrnaMapper: GPU-accelerated read mapper to map against short tRNA sequences.
+# gpu-tRNA-mapper
+gpu-tRNA-mapper: GPU-accelerated read mapper to map against short tRNA sequences.
 
 
-For a set of input reads and reference sequences, gpuTrnaMapper aligns each read to all reference sequences.
+For a set of input reads and reference sequences, gpu-tRNA-mapper aligns each read to all reference sequences.
 By default, an optimal local alignment is used. 
-For each read, the highest scoring alignment is written to output file in SAM format. If multiple alignments share the same highest score all alignments are written to output file.
+For each read, the highest scoring alignment is written to output file in SAM format. If multiple references share the same highest score all alignments are written to output file.
 
 The computation of the all-to-all alignment scores is GPU-accelerated. After determining the highest alignment score for each read, the parasail alignment library is used on the CPU to recompute the corresponding best alignments with a traceback.
 
@@ -22,7 +22,7 @@ The computation of the all-to-all alignment scores is GPU-accelerated. After det
 
 ## Setup
 
-In the top folder, execute the following commands to build `gpu_trna_mapper`
+In the top folder, execute the following commands to build `gpu-tRNA-mapper`
 
 Step 1. Set up Parasail:
 ```
@@ -37,9 +37,9 @@ cd ../..
 Alternatively, modify the Makefile to point to an existing parasail library in your system.
 In any case, make sure that libparasail.so is added to `LD_LIBRARY_PATH`
 
-Step 2. Set up gpuTrnaMapper:
+Step 2. Set up gpu-tRNA-mapper:
 ```
-make -j gpu_trna_mapper
+make -j gpu-trna-mapper
 ```
 
 The build step compiles the GPU code for all GPU archictectures of GPUs detected in the system. The CUDA environment variable `CUDA_VISIBLE_DEVICES` can be used to control the detected GPUs. If `CUDA_VISIBLE_DEVICES` is not set, it will default to all GPUs in the system.
@@ -51,7 +51,7 @@ The build step compiles the GPU code for all GPU archictectures of GPUs detected
 
 Minimal example command: 
 ```
-    ./gpu_trna_mapper --readFileName data/reads.fastq --referenceFileName data/trna_ref.fasta --outputFileName data/output.sam
+    ./gpu-tRNA-mapper --readFileName data/reads.fastq --referenceFileName data/trna_ref.fasta --outputFileName data/output.sam
 ```
 
 Mandatory arguments:
@@ -73,13 +73,13 @@ Optional arguments:
 
 Input files can be DNA or RNA. We support a four letter alphabet A, C, G, (T/U) , where T matches U and vice-versa.
 
-gpu_trna_mapper uses GPU 0. Use the CUDA environment variable `CUDA_VISIBLE_DEVICES` to select the GPU in multi-GPU systems
+gpu-tRNA-mapper uses GPU 0. Use the CUDA environment variable `CUDA_VISIBLE_DEVICES` to select the GPU in multi-GPU systems
 
-gpu_trna_mapper makes use of CPU multi-threading with OpenMP. The environment variable `OMP_NUM_THREADS` is used to control the number of CPU threads.
+gpu-tRNA-mapper makes use of CPU multi-threading with OpenMP. The environment variable `OMP_NUM_THREADS` is used to control the number of CPU threads.
 
 
 Advanced example command:
 
 ```
-    CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=32 ./gpu_trna_mapper --readFileName data/reads.fastq --referenceFileName data/trna_ref.fasta --outputFileName data/output.sam --scoring 5,-1,-5,-1 --minAlignmentScore 60 --resultListSize 10
+    CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=32 ./gpu-tRNA-mapper --readFileName data/reads.fastq --referenceFileName data/trna_ref.fasta --outputFileName data/output.sam --scoring 5,-1,-5,-1 --minAlignmentScore 60 --resultListSize 10
 ```

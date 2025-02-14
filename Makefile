@@ -23,7 +23,7 @@ NVCC_FLAGS = $(ARCH_SPECIFIER) --threads 3 -lineinfo --extended-lambda -Xcompile
 
 COMPILE = nvcc $(NVCC_FLAGS) $(DIALECT) $(OPTIMIZATION) $(WARNINGS) -c $< -o $@
 
-EXECUTABLE = gpu_trna_mapper
+EXECUTABLE = gpu-tRNA-mapper
 
 .PHONY:	all
 all:	$(EXECUTABLE)
