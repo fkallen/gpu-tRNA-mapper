@@ -51,7 +51,7 @@ The build step compiles the GPU code for all GPU archictectures of GPUs detected
 
 Minimal example command: 
 ```
-    ./gpu_trna_mapper --readFileName data/reads.fastq --referenceFileName data/trna_ref.fasta > data/output.sam
+    ./gpu_trna_mapper --readFileName data/reads.fastq --referenceFileName data/trna_ref.fasta --outputFileName data/output.sam
 ```
 
 Mandatory arguments:
@@ -68,7 +68,7 @@ Optional arguments:
     --verbose : More console output
     --batchsize num : Align num reads in parallel (default: 100000)
     --minAlignmentScore num : the best observed alignment score for a read must be >= num, otherwise the read will be treated as unmapped (default: 0)
-    --resultListSize num : If a read can be mapped to multiple reference sequences with the same best score, output num alignments (default: 2147483647 (output all best mappings))
+    --resultListSize num : If a read can be mapped to multiple reference sequences with the same best score, output up to num alignments (default: 2147483647 (output all best mappings))
 ```
 
 Input files can be DNA or RNA. We support a four letter alphabet A, C, G, (T/U) , where T matches U and vice-versa.
