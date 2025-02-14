@@ -39,7 +39,7 @@ In any case, make sure that libparasail.so is added to `LD_LIBRARY_PATH`
 
 Step 2. Set up gpu-tRNA-mapper:
 ```
-make -j gpu-trna-mapper
+make -j gpu-tRNA-mapper
 ```
 
 The build step compiles the GPU code for all GPU archictectures of GPUs detected in the system. The CUDA environment variable `CUDA_VISIBLE_DEVICES` can be used to control the detected GPUs. If `CUDA_VISIBLE_DEVICES` is not set, it will default to all GPUs in the system.
