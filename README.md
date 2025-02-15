@@ -13,7 +13,7 @@ The computation of the all-to-all alignment scores is GPU-accelerated. After det
 * C++17 compiler
 
 ## Hardware requirements
-* CUDA-capable GPU with Volta architecture or newer. Older GPUs could work but have not been tested.
+* CUDA-capable GPU with Volta architecture or newer. The code should also compile for older GPUs, i.e. Pascal and earlier, but was not tested on those.
 
 
 ## Download
@@ -37,13 +37,18 @@ cd ../..
 Alternatively, modify the Makefile to point to an existing parasail library in your system.
 In any case, make sure that libparasail.so is added to `LD_LIBRARY_PATH`
 
-Step 2. Set up gpu-tRNA-mapper:
+Step 2. Build gpu-tRNA-mapper:
 ```
-make -j gpu-tRNA-mapper
+make gpu-tRNA-mapper [build-options]
 ```
 
-The build step compiles the GPU code for all GPU archictectures of GPUs detected in the system. The CUDA environment variable `CUDA_VISIBLE_DEVICES` can be used to control the detected GPUs. If `CUDA_VISIBLE_DEVICES` is not set, it will default to all GPUs in the system.
-
+Build options:  
+- **GPUARCH=targetarch** : Specify the target GPU architecture
+    - **GPUARCH=native** (DEFAULT) :  Compile code for all GPU archictectures of GPUs detected in the machine. The CUDA environment variable `CUDA_VISIBLE_DEVICES` can be used to control the detected GPUs. If `CUDA_VISIBLE_DEVICES` is not set, it will default to all GPUs in the machine.
+    - **GPUARCH=all** : Compile code for all GPU architectures supported by the current CUDA toolkit, and ensure forward compatibility for unreleased GPU architectures
+    - **GPUARCH=all-major** : Compile code for all major GPU architectures supported by the current CUDA toolkit, and ensure forward compatibility for unreleased GPU architectures
+    - **GPUARCH=sm_XY** : Compile only for the single GPU architecture with major version X and minor version Y. For example, "GPUARCH=sm_89" to target the ADA architecture
+- **GPUARCH_NUM_COMPILE_THREADS=N** : Parallelize compilation of multiple GPU architectures using N threads. (Default N = 1)
 
 
 

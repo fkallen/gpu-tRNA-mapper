@@ -12,14 +12,17 @@ DEFINES = -DLIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE -DNDEBUG
 INCLUDES = -I$(RMM_INCDIR) -I$(NVTX_INCDIR) -I$(PARASAIL_DIR) -I$(GPU_ALIGNMENT_API)
 LDFLAGS = -L$(PARASAIL_DIR)/build -lz -ldl -lparasail
 
-# ARCH_SPECIFIER = \
-# 	-gencode=arch=compute_70,code=sm_70 \
-# 	-gencode=arch=compute_80,code=sm_80 \
-# 	-gencode=arch=compute_89,code=sm_89
+TARGET_GPU_ARCH = $(GPUARCH)
+ifeq ($(TARGET_GPU_ARCH),)
+	TARGET_GPU_ARCH = native
+endif
 
-ARCH_SPECIFIER = -arch=native
+GPU_COMPILE_THREADS = $(GPUARCH_NUM_COMPILE_THREADS)
+ifeq ($(GPU_COMPILE_THREADS),)
+	GPU_COMPILE_THREADS = 1
+endif
 
-NVCC_FLAGS = $(ARCH_SPECIFIER) --threads 3 -lineinfo --extended-lambda -Xcompiler "-fopenmp" $(DEFINES) $(INCLUDES)
+NVCC_FLAGS = -arch=$(TARGET_GPU_ARCH) --threads $(GPU_COMPILE_THREADS) -lineinfo --extended-lambda -Xcompiler "-fopenmp" $(DEFINES) $(INCLUDES)
 
 COMPILE = nvcc $(NVCC_FLAGS) $(DIALECT) $(OPTIMIZATION) $(WARNINGS) -c $< -o $@
 
