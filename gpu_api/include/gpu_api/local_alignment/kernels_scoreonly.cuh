@@ -9,6 +9,7 @@
 #include "state_affine.cuh"
 #include "../substitution_score_provider.cuh"
 #include "../util.cuh"
+#include "../grid_constant_helper.hpp"
 #include "../letter_utilities.cuh"
 #include "../cuda_errorcheck.cuh"
 
@@ -32,10 +33,10 @@ namespace localalignment{
     __global__
     __launch_bounds__(blocksize,1)
     void alphabet_substitutionmatrix_floatOrInt_kernel(
-        __grid_constant__ int* const scoreOutput,
-        __grid_constant__ const InputData inputData,
-        __grid_constant__ const SUBMAT* const substmatPtr,
-        __grid_constant__ const ScoringKernelParam<ScoreType> scoring
+        GRID_CONSTANT_SPECIFIER int* const scoreOutput,
+        GRID_CONSTANT_SPECIFIER const InputData inputData,
+        GRID_CONSTANT_SPECIFIER const SUBMAT* const substmatPtr,
+        GRID_CONSTANT_SPECIFIER const ScoringKernelParam<ScoreType> scoring
     ){
         static_assert(std::is_same_v<ScoreType, float> || std::is_same_v<ScoreType, int>);
 
@@ -250,12 +251,12 @@ namespace localalignment{
     __global__
     __launch_bounds__(blocksize,1)
     void alphabet_substitutionmatrix_floatOrInt_multipass_kernel(
-        __grid_constant__ int* const scoreOutput,
-        __grid_constant__ const InputData inputData,
-        __grid_constant__ const SUBMAT* const substmatPtr,
-        __grid_constant__ const ScoringKernelParam<ScoreType> scoring,
-        __grid_constant__ char* const tempStorage,
-        __grid_constant__ const size_t tempBytesPerGroup
+        GRID_CONSTANT_SPECIFIER int* const scoreOutput,
+        GRID_CONSTANT_SPECIFIER const InputData inputData,
+        GRID_CONSTANT_SPECIFIER const SUBMAT* const substmatPtr,
+        GRID_CONSTANT_SPECIFIER const ScoringKernelParam<ScoreType> scoring,
+        GRID_CONSTANT_SPECIFIER char* const tempStorage,
+        GRID_CONSTANT_SPECIFIER const size_t tempBytesPerGroup
     ){      
         static_assert(std::is_same_v<ScoreType, float> || std::is_same_v<ScoreType, int>);
 

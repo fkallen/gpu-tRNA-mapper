@@ -9,6 +9,7 @@
 #include "state_affine.cuh"
 #include "../substitution_score_provider.cuh"
 #include "../util.cuh"
+#include "../grid_constant_helper.hpp"
 #include "../letter_utilities.cuh"
 #include "../cuda_errorcheck.cuh"
 
@@ -35,14 +36,14 @@ template<
 __global__
 __launch_bounds__(blocksize,1)
 void alphabet_substitutionmatrix_floatOrInt_multitile_withStartAndEndPos_forwardpass_kernel(
-    __grid_constant__ int* __restrict__ const scoreOutput,
-    __grid_constant__ int* __restrict__ const queryEndPositions_inclusive,
-    __grid_constant__ int* __restrict__ const subjectEndPositions_inclusive,
-    __grid_constant__ const InputData inputData,
-    __grid_constant__ const SUBMAT* __restrict__ const substmatPtr,
-    __grid_constant__ const ScoringKernelParam<ScoreType> scoring,
-    __grid_constant__ char* __restrict__ const tempStorage,
-    __grid_constant__ const size_t tempBytesPerGroup
+    GRID_CONSTANT_SPECIFIER int* __restrict__ const scoreOutput,
+    GRID_CONSTANT_SPECIFIER int* __restrict__ const queryEndPositions_inclusive,
+    GRID_CONSTANT_SPECIFIER int* __restrict__ const subjectEndPositions_inclusive,
+    GRID_CONSTANT_SPECIFIER const InputData inputData,
+    GRID_CONSTANT_SPECIFIER const SUBMAT* __restrict__ const substmatPtr,
+    GRID_CONSTANT_SPECIFIER const ScoringKernelParam<ScoreType> scoring,
+    GRID_CONSTANT_SPECIFIER char* __restrict__ const tempStorage,
+    GRID_CONSTANT_SPECIFIER const size_t tempBytesPerGroup
 ){
     static_assert(std::is_same_v<ScoreType, float> || std::is_same_v<ScoreType, int>);
     static_assert(penaltyType == PenaltyType::Affine);
@@ -1685,16 +1686,16 @@ template<
 __global__
 __launch_bounds__(blocksize,1)
 void alphabet_substitutionmatrix_floatOrInt_multitile_withStartAndEndPos_backwardpass_kernel(
-    __grid_constant__ int* __restrict__ const queryStartPositions_inclusive,
-    __grid_constant__ int* __restrict__ const subjectStartPositions_inclusive,
-    __grid_constant__ const int* __restrict__ const scores,
-    __grid_constant__ const int* __restrict__ const queryEndPositions_inclusive,
-    __grid_constant__ const int* __restrict__ const subjectEndPositions_inclusive,
-    __grid_constant__ const InputData inputData,
-    __grid_constant__ const SUBMAT* __restrict__ const substmatPtr,
-    __grid_constant__ const ScoringKernelParam<ScoreType> scoring,
-    __grid_constant__ char* __restrict__ const tempStorage,
-    __grid_constant__ const size_t tempBytesPerGroup
+    GRID_CONSTANT_SPECIFIER int* __restrict__ const queryStartPositions_inclusive,
+    GRID_CONSTANT_SPECIFIER int* __restrict__ const subjectStartPositions_inclusive,
+    GRID_CONSTANT_SPECIFIER const int* __restrict__ const scores,
+    GRID_CONSTANT_SPECIFIER const int* __restrict__ const queryEndPositions_inclusive,
+    GRID_CONSTANT_SPECIFIER const int* __restrict__ const subjectEndPositions_inclusive,
+    GRID_CONSTANT_SPECIFIER const InputData inputData,
+    GRID_CONSTANT_SPECIFIER const SUBMAT* __restrict__ const substmatPtr,
+    GRID_CONSTANT_SPECIFIER const ScoringKernelParam<ScoreType> scoring,
+    GRID_CONSTANT_SPECIFIER char* __restrict__ const tempStorage,
+    GRID_CONSTANT_SPECIFIER const size_t tempBytesPerGroup
 ){
     static_assert(std::is_same_v<ScoreType, float> || std::is_same_v<ScoreType, int>);
     static_assert(penaltyType == PenaltyType::Affine);
