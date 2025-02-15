@@ -6,7 +6,7 @@
 
 #include <string>
 
-#include <nvtx3/nvToolsExt.h>
+#include <nvtx3/nvtx3.hpp>
 
 std::string_view sequenceHeaderToNameView(std::string_view header){
     auto pos = header.find_first_of(' ');

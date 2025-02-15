@@ -7,7 +7,7 @@
 #include <future>
 #include <iostream>
 
-#include <nvtx3/nvToolsExt.h>
+#include <nvtx3/nvtx3.hpp>
 
 struct ReadParserWorker{
     const Options* optionsPtr;

@@ -10,7 +10,8 @@
 #include <string>
 #include <sstream>
 #include <string_view>
-#include <nvtx3/nvToolsExt.h>
+
+#include <nvtx3/nvtx3.hpp>
 
 
 struct OutputWriterWorker{
