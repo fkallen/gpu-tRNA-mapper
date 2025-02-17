@@ -51,6 +51,14 @@ Build options:
 - **GPUARCH_NUM_COMPILE_THREADS=N** : Parallelize compilation of multiple GPU architectures using N threads. (Default N = 1)
 
 
+Step 3 (optional). Install gpu-tRNA-mapper
+```
+make install PREFIX=installdir
+```
+
+Copies the executable to directory "installdir/bin". Default is **PREFIX=/usr/local**
+
+
 
 ## Usage
 

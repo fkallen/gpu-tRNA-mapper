@@ -22,9 +22,15 @@ ifeq ($(GPU_COMPILE_THREADS),)
 	GPU_COMPILE_THREADS = 1
 endif
 
+INSTALL_PREFIX = $(PREFIX)
+ifeq ($(INSTALL_PREFIX),)
+	INSTALL_PREFIX = /usr/local
+endif
+
 NVCC_FLAGS = -arch=$(TARGET_GPU_ARCH) --threads $(GPU_COMPILE_THREADS) -lineinfo --extended-lambda -Xcompiler "-fopenmp" $(DEFINES) $(INCLUDES)
 
 COMPILE = nvcc $(NVCC_FLAGS) $(DIALECT) $(OPTIMIZATION) $(WARNINGS) -c $< -o $@
+COMPILE_ECHO = echo "Compiling $@"; $(COMPILE)
 
 EXECUTABLE = gpu-tRNA-mapper
 
@@ -41,38 +47,45 @@ BUILDDIR = build
 $(shell mkdir -p $(BUILDDIR))
 
 $(BUILDDIR)/main.o: main.cu 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 $(BUILDDIR)/sam_helpers.o: sam_helpers.cpp 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 $(BUILDDIR)/parsing.o: parsing.cu 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 $(BUILDDIR)/smallkernels.o: smallkernels.cu 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 $(BUILDDIR)/read_parser_worker.o: read_parser_worker.cu 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 $(BUILDDIR)/output_writer_worker.o: output_writer_worker.cu 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 $(BUILDDIR)/cpu_traceback_worker.o: cpu_traceback_worker.cu 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 $(BUILDDIR)/gpu_topscores_worker_local.o: gpu_topscores_worker_local.cu 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 $(BUILDDIR)/gpu_topscores_worker_semiglobal.o: gpu_topscores_worker_semiglobal.cu 
-	$(COMPILE)
+	@ $(COMPILE_ECHO)
 
 
 
 $(EXECUTABLE): $(OBJECTS)
-	nvcc $^ -o $(EXECUTABLE) $(NVCC_FLAGS) $(LDFLAGS)
+	@ echo "Linking $(EXECUTABLE)"
+	@ nvcc $^ -o $(EXECUTABLE) $(NVCC_FLAGS) $(LDFLAGS)
 
 
-
+.PHONY:	clean
 clean:
 	rm -rf build/* $(EXECUTABLE)
+
+.PHONY:	install
+install: $(EXECUTABLE)
+	mkdir -p "$(INSTALL_PREFIX)/bin"
+	cp $(EXECUTABLE) "$(INSTALL_PREFIX)/bin"
+
