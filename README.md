@@ -20,24 +20,14 @@ The computation of the all-to-all alignment scores is GPU-accelerated. After det
 `git clone --recurse-submodules git@github.com:fkallen/gpu-tRNA-mapper.git`
 
 
+## External dependencies
+
+We require a correctly set up Parasail 2.6.2 alignment library (https://github.com/jeffdaily/parasail).
+
 ## Setup
 
-In the top folder, execute the following commands to build `gpu-tRNA-mapper`
 
-Step 1. Set up Parasail:
-```
-cd parasail-2.6.2
-mkdir build
-cd build
-cmake ..
-make
-cd ../..
-```
-
-Alternatively, modify the Makefile to point to an existing parasail library in your system.
-In any case, make sure that libparasail.so is added to `LD_LIBRARY_PATH`
-
-Step 2. Build gpu-tRNA-mapper:
+Step 1. Build gpu-tRNA-mapper:
 ```
 make gpu-tRNA-mapper [build-options]
 ```
@@ -51,7 +41,7 @@ Build options:
 - **GPUARCH_NUM_COMPILE_THREADS=N** : Parallelize compilation of multiple GPU architectures using N threads. (Default N = 1)
 
 
-Step 3 (optional). Install gpu-tRNA-mapper
+Step 2 (optional). Install gpu-tRNA-mapper
 ```
 make install PREFIX=installdir
 ```
