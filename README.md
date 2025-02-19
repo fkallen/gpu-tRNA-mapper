@@ -9,8 +9,22 @@ For each read, the highest scoring alignment is written to output file in SAM fo
 The computation of the all-to-all alignment scores is GPU-accelerated. After determining the highest alignment score for each read, the parasail alignment library is used on the CPU to recompute the corresponding best alignments with a traceback.
 
 ## Software requirements
+
 * Linux operating system with compatible CUDA Toolkit 12 or newer
 * C++17 compiler
+* parasail: https://github.com/jeffdaily/parasail - tested with version 2.6.2
+
+By default parasail-2.6.2 will be searched in the local directory. So you may
+compile it there like this:
+
+```
+cd parasail-2.6.2
+mkdir build
+cd build
+cmake ..
+make
+cd ../..
+```
 
 ## Hardware requirements
 * CUDA-capable GPU with Volta architecture or newer. The code should also compile for older GPUs, i.e. Pascal and earlier, but was not tested on those.
@@ -26,29 +40,46 @@ We require a correctly set up Parasail 2.6.2 alignment library (https://github.c
 
 ## Setup
 
-
 Step 1. Build gpu-tRNA-mapper:
 ```
-make gpu-tRNA-mapper [build-options]
+make -j [build-options]
 ```
 
-Build options:  
-- **GPUARCH=targetarch** : Specify the target GPU architecture
+You may require one or more of the following build options:
+
+- **PARASAIL_INCLUDE_DIR** : Parasail's include files
+    - Default: parasail-2.6.2/include
+    - Example: /usr/local/parasail/include
+- **PARASAIL_LIB_DIR** : Paradails's library path - should contain a libparasail.so
+    - Default: parasail-2.6.2
+    - Example: /usr/local/parasail/lib
+- **GPUARCH=targetarch** : Specify the target GPU architecture - set if you want to use the same binary with diffrent GPUs
     - **GPUARCH=native** (DEFAULT) :  Compile code for all GPU archictectures of GPUs detected in the machine. The CUDA environment variable `CUDA_VISIBLE_DEVICES` can be used to control the detected GPUs. If `CUDA_VISIBLE_DEVICES` is not set, it will default to all GPUs in the machine.
     - **GPUARCH=all** : Compile code for all GPU architectures supported by the current CUDA toolkit, and ensure forward compatibility for unreleased GPU architectures
     - **GPUARCH=all-major** : Compile code for all major GPU architectures supported by the current CUDA toolkit, and ensure forward compatibility for unreleased GPU architectures
     - **GPUARCH=sm_XY** : Compile only for the single GPU architecture with major version X and minor version Y. For example, "GPUARCH=sm_89" to target the ADA architecture
 - **GPUARCH_NUM_COMPILE_THREADS=N** : Parallelize compilation of multiple GPU architectures using N threads. (Default N = 1)
 
-
-Step 2 (optional). Install gpu-tRNA-mapper
+Step 2. (optional) Install gpu-tRNA-mapper
 ```
 make install PREFIX=installdir
 ```
 
 Copies the executable to directory "installdir/bin". Default is **PREFIX=/usr/local**
 
-
+Please note, that this will *not* take care of Parasail. You may want to install
+Parasail separately into a suitable location first. Next, link the binary again using
+a suitable **PARASAIL_LIB_DIR** parameter, e.g.:
+```
+    cd parasail-2.6.2
+    sudo make install
+    cd ..
+    rm gpu-tRNA-mapper
+    make PARASAIL_INCLUDE_DIR=/usr/local/include PARASAIL_LIB_DIR=/usr/local/lib
+    sudo make install
+```
+Without that you may have to set **LD_LIBRARY_PATH** to Parasail's lib folder to
+ensure that the library will be found.
 
 ## Usage
 
