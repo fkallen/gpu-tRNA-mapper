@@ -216,7 +216,9 @@ struct CpuTracebackAlignerWorker{
                             referenceSequence + refBeginPos, (refEndPos - refBeginPos),
                             parasail_scoring_matrix,
                             true,
-                            "TU"
+                            //"TUANCNGNTNUN"
+                            //need to re-arrange letters due to bug in parasail 2.6.2
+                            "TUNANCNGNTNU"
                         ),
                         parasail_cigar_free
                     );
@@ -403,7 +405,9 @@ struct CpuTracebackAlignerWorker{
                             referenceSequence + refBeginPos, (refEndPos_excl - refBeginPos),
                             parasail_scoring_matrix,
                             true,
-                            "TU"
+                            //"TUANCNGNTNUN"
+                            //need to re-arrange letters due to bug in parasail 2.6.2
+                            "TUNANCNGNTNU"
                         ),
                         parasail_cigar_free
                     );
