@@ -42,15 +42,30 @@ void findBestScore(Options options){
         substitutionMatrix2D[i][i] = options.scoring.matchscore;
     }
 
-    //N matches all
-    // for(int i = 0; i < alphabetSize; i++){
-    //     substitutionMatrix2D[alphabetSize-1][i] = options.scoring.matchscore;
-    //     substitutionMatrix2D[i][alphabetSize-1] = options.scoring.matchscore;
+    //if N is supported
+    if(alphabetSize > 4){
+        //N matches all
+        for(int i = 0; i < alphabetSize; i++){
+            substitutionMatrix2D[4][i] = options.scoring.matchscore;
+            substitutionMatrix2D[i][4] = options.scoring.matchscore;
+        }
+    }
+    // std::cout << "gpu lib substitution matrix:\n";
+    // for(int r = 0; r < alphabetSize; r++){
+    //     for(int c = 0; c < alphabetSize; c++){
+    //         printf("%3d ", substitutionMatrix2D[r][c]);
+    //     }
+    //     printf("\n");
     // }
+    // printf("\n");
 
     auto parasailScoringMatrix = [&](){
+        std::string parasailAlphabet = "ACGTU";
+        if(alphabetSize > 4){
+            parasailAlphabet = "ACGTUN";
+        }
         auto matrix = ParasailMatrix(
-            parasail_matrix_create("ACGTU", options.scoring.matchscore, options.scoring.mismatchscore),
+            parasail_matrix_create(parasailAlphabet.c_str(), options.scoring.matchscore, options.scoring.mismatchscore),
             parasail_matrix_free
         );
 
@@ -64,6 +79,26 @@ void findBestScore(Options options){
             int t_value = matrix->user_matrix[r*matrix->size + 3];
             parasail_matrix_set_value(matrix.get(), r, 4, t_value);
         }
+
+        //if N is supported
+        if(alphabetSize > 4){
+            //N matches all
+            for(int c = 0; c < 6; c++){
+                parasail_matrix_set_value(matrix.get(), 5, c, options.scoring.matchscore);
+            }
+            for(int r = 0; r < 6; r++){
+                parasail_matrix_set_value(matrix.get(), r, 5, options.scoring.matchscore);
+            }
+        }
+
+        // std::cout << "parasail substitution matrix:\n";
+        // for(int r = 0; r < int(parasailAlphabet.size()); r++){
+        //     for(int c = 0; c < int(parasailAlphabet.size()); c++){
+        //         printf("%3d ", matrix->user_matrix[r*matrix->size + c]);
+        //     }
+        //     printf("\n");
+        // }
+        // printf("\n");
 
         return matrix;
     }();
