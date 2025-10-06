@@ -5,7 +5,7 @@
 #include "substitutionmatrix.cuh"
 
 #include <array>
-
+#include <algorithm>
 
 
 
