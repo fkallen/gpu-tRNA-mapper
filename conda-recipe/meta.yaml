@@ -1,0 +1,38 @@
+package:
+  name: gpu-trna-mapper
+  version: "0.1.0"
+
+source:
+  #git_url: https://github.com/fkallen/gpu-tRNA-mapper.git
+  #git_tag: v0.1.0 # v0.1.0  # tag or branch
+  path: ../
+
+
+#cannot use cuda 12.9 because of an issue with cccl when setting -arch=all
+#don't use cuda 13 to pre-compile for Volta and earlier
+
+requirements:
+  build:
+    - git
+    - make
+    - zlib
+    - cuda-toolkit =12.8.1
+    - parasail >=2.6.2
+  host:
+    #- cuda-toolkit =12.8.1
+    - zlib
+    - parasail >=2.6.2
+  run:
+    - cuda-runtime =12.8.1
+    - zlib
+    - parasail >=2.6.2
+
+
+about:
+  home: https://github.com/fkallen/gpu-tRNA-mapper
+  license: Apache-2.0
+  summary: "GPU-accelerated read mapper to map against short tRNA sequences"
+
+extra:
+  recipe-maintainers:
+    - fkallen
