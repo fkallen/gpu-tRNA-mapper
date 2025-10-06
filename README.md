@@ -10,7 +10,7 @@ The computation of the all-to-all alignment scores is GPU-accelerated. After det
 
 ## Software requirements
 
-* Linux operating system with compatible CUDA Toolkit 12 or newer
+* Linux operating system with compatible CUDA Toolkit 12 or newer. CUDA Toolkit 13 cannot be used to compile for Volta and older GPU architectures.
 * C++17 compiler
 * parasail: https://github.com/jeffdaily/parasail - tested with version 2.6.2
 
