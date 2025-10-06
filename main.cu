@@ -173,7 +173,25 @@ void findBestScore(Options options){
 
 
 
+void printHelp(int /*argc*/, char** argv){
+    std::cout << "Usage: " << argv[0];
+    std::cout << " --readFileName data/reads.fastq --referenceFileName data/trna_ref.fasta --outputFileName data/output.sam";
+    std::cout << " [options]\n";
+    std::cout << "\n";
+    std::cout << "Mandatory arguments:\n";
+    std::cout << "--readFileName file : fasta or fastq, can be .gz file\n";
+    std::cout << "--referenceFileName file : fasta or fastq, can be .gz file\n";
+    std::cout << "--outputFileName file.sam\n";
+    std::cout << "\n";
+    std::cout << "Optional arguments:\n";
+    std::cout << "--scoring matchscore,mismatchscore,gapopenscore,gapextendscore : the alignment score parameters (default: --scoring 2,-1,-10,-1)\n";
+    std::cout << "--semiglobalAlignment : Perform a semi-global alignment instead of a local alignment\n";
+    std::cout << "--verbose : More console output\n";
+    std::cout << "--batchsize num : Align num reads in parallel (default: 100000)\n";
+    std::cout << "--minAlignmentScore num : the best observed alignment score for a read must be >= num, otherwise the read will be treated as unmapped (default: 0)\n";
+    std::cout << "--resultListSize num : If a read can be mapped to multiple reference sequences with the same best score, output up to num alignments (default: 2147483647 (output all best mappings))\n";
 
+}
 
 
 int main(int argc, char** argv){
@@ -183,6 +201,10 @@ int main(int argc, char** argv){
     bool hasScoringOptions = false;
     for(int x = 1; x < argc; x++){
         std::string argstring = argv[x];
+        if(argstring == "-h" || argstring == "--help"){
+            printHelp(argc, argv);
+            return 0;
+        }
         if(argstring == "--readFileName"){
             options.readFileName = argv[x+1];
             x++;
@@ -203,9 +225,6 @@ int main(int argc, char** argv){
             options.queue_depth = std::atoi(argv[x+1]);
             x++;
         }
-        // if(argstring == "--use16x2"){
-        //     options.use16x2 = true;
-        // }
         if(argstring == "--minAlignmentScore"){
             options.minAlignmentScore = std::atoi(argv[x+1]);
             x++;
@@ -273,14 +292,17 @@ int main(int argc, char** argv){
 
     if(options.readFileName == "" || options.referenceFileName == ""){
         std::cout << "Invalid input files\n";
+        printHelp(argc, argv);
         return 0;
     }
     if(options.outputFileName == ""){
         std::cout << "Invalid output file\n";
+        printHelp(argc, argv);
         return 0;
     }
     if(options.resultListSize <= 0){
         std::cout << "resultListSize must be > 0\n";
+        printHelp(argc, argv);
         return 0;
     }
 
