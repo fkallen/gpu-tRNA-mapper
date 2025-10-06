@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-constexpr int alphabetSize = 4; // A, C, G, T/U
+constexpr int alphabetSize = 5; // A, C, G, T/U, N
 
 struct ConvertLetters_alphabet_4{
     __host__ __device__
@@ -29,7 +29,7 @@ struct ConvertLetters_alphabet_5{
 };
 
 
-using ConvertLetters_functor = ConvertLetters_alphabet_4;
+using ConvertLetters_functor = ConvertLetters_alphabet_5;
 
 
 

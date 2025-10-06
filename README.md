@@ -53,12 +53,12 @@ You may require one or more of the following build options:
 - **PARASAIL_LIB_DIR** : Paradails's library path - should contain a libparasail.so
     - Default: parasail-2.6.2
     - Example: /usr/local/parasail/lib
-- **GPUARCH=targetarch** : Specify the target GPU architecture - set if you want to use the same binary with diffrent GPUs
-    - **GPUARCH=native** (DEFAULT) :  Compile code for all GPU archictectures of GPUs detected in the machine. The CUDA environment variable `CUDA_VISIBLE_DEVICES` can be used to control the detected GPUs. If `CUDA_VISIBLE_DEVICES` is not set, it will default to all GPUs in the machine.
-    - **GPUARCH=all** : Compile code for all GPU architectures supported by the current CUDA toolkit, and ensure forward compatibility for unreleased GPU architectures
-    - **GPUARCH=all-major** : Compile code for all major GPU architectures supported by the current CUDA toolkit, and ensure forward compatibility for unreleased GPU architectures
-    - **GPUARCH=sm_XY** : Compile only for the single GPU architecture with major version X and minor version Y. For example, "GPUARCH=sm_89" to target the ADA architecture
-- **GPUARCH_NUM_COMPILE_THREADS=N** : Parallelize compilation of multiple GPU architectures using N threads. (Default N = 1)
+- **TARGET_GPU_ARCH=targetarch** : Specify the target GPU architecture(s) - set if you want to use the same binary with diffrent GPUs
+    - **TARGET_GPU_ARCH=native** (DEFAULT) :  Compile code for all GPU archictectures of GPUs detected in the machine. The CUDA environment variable `CUDA_VISIBLE_DEVICES` can be used to control the detected GPUs. If `CUDA_VISIBLE_DEVICES` is not set, it will default to all GPUs in the machine.
+    - **TARGET_GPU_ARCH=all** : Compile code for all GPU architectures supported by the current CUDA toolkit, and ensure forward compatibility for unreleased GPU architectures
+    - **TARGET_GPU_ARCH=all-major** : Compile code for all major GPU architectures supported by the current CUDA toolkit, and ensure forward compatibility for unreleased GPU architectures
+    - **TARGET_GPU_ARCH="XY"** : Compile only for the GPU architecture with major version X and minor version Y. Multiple XY can be specified separated by space. For example, TARGET_GPU_ARCH="89 90" compiles for both the Ada and Hopper architecture.
+- **GPU_COMPILE_THREADS=N** : Parallelize compilation of multiple GPU architectures using N threads. (Default N = 1)
 
 Step 2. (optional) Install gpu-tRNA-mapper
 ```

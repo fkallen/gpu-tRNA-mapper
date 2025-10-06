@@ -20,7 +20,18 @@ DEFINES = -DLIBCUDACXX_ENABLE_EXPERIMENTAL_MEMORY_RESOURCE -DNDEBUG
 INCLUDES = -I$(RMM_INCDIR) -I$(NVTX_INCDIR) -I$(PARASAIL_INCLUDE_DIR) -I$(GPU_ALIGNMENT_API)
 LDFLAGS = -lz -ldl -L $(PARASAIL_LIB_DIR) -l parasail -Xcompiler \"-Wl,-rpath,$(PARASAIL_LIB_DIR)\"
 
-NVCC_FLAGS = -arch=$(TARGET_GPU_ARCH) --threads $(GPU_COMPILE_THREADS) -lineinfo --extended-lambda -Xcompiler "-fopenmp" $(DEFINES) $(INCLUDES)
+NVCC_GPU_ARCH = -arch=native
+
+ifeq ($(TARGET_GPU_ARCH), native)
+	NVCC_GPU_ARCH = -arch=native
+else ifeq ($(TARGET_GPU_ARCH), all)
+	NVCC_GPU_ARCH = -arch=all
+else ifeq ($(TARGET_GPU_ARCH), all-major)
+	NVCC_GPU_ARCH = -arch=all-major
+else
+	NVCC_GPU_ARCH := $(foreach N, $(TARGET_GPU_ARCH),-gencode=arch=compute_$(N),code=sm_$(N) )
+endif
+NVCC_FLAGS = $(NVCC_GPU_ARCH) --threads $(GPU_COMPILE_THREADS) -lineinfo --extended-lambda -Xcompiler "-fopenmp" $(DEFINES) $(INCLUDES)
 
 COMPILE = nvcc $(NVCC_FLAGS) $(DIALECT) $(OPTIMIZATION) $(WARNINGS) -c $< -o $@
 COMPILE_ECHO = echo "Compiling $@"; $(COMPILE)
