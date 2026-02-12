@@ -4,16 +4,23 @@
 
 #include "common.cuh"
 
+#include <algorithm>
+#include <cctype>
 #include <string>
+#include <string_view>
 
 #include <nvtx3/nvtx3.hpp>
 
 std::string_view sequenceHeaderToNameView(std::string_view header){
-    auto pos = header.find_first_of(' ');
-    if(pos == std::string::npos){
+    auto pos = std::find_if(header.begin(), header.end(), [](unsigned char uc){
+        return std::isspace(uc);
+    });
+
+    if(pos == header.end()){
         return header;
     }else{
-        return header.substr(0, pos);
+        const auto nameEnd = std::distance(header.begin(), pos);
+        return header.substr(0, nameEnd);
     }
 }
 
