@@ -1,4 +1,4 @@
-# gpu-tRNA-mapper
+# gpu-tRNA-mapper v0.2.0
 gpu-tRNA-mapper: GPU-accelerated read mapper to map against short tRNA sequences.
 
 
